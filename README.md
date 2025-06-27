@@ -103,7 +103,7 @@ CREATE TABLE users (
 All services are hosted and run locally on your development machine for testing and development purposes.
 
 ---
-# Demo video for initial development: https://drive.google.com/file/d/1oNg2NLvihehDSqOliK85O2JJc_xib2hD/view?usp=sharing
+Demo video for initial development: https://drive.google.com/file/d/1oNg2NLvihehDSqOliK85O2JJc_xib2hD/view?usp=sharing
 
 ## License
 MIT
