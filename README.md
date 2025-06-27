@@ -8,6 +8,17 @@ GigKonnect is a fullstack web platform that connects clients with gig workers (s
 - Admin dashboard for user management (view, create, delete users)
 - Responsive, modern UI
 
+## App Interface
+
+### Login Page
+![Login Page](screenshots/login%20page.png)
+
+### Landing Page
+![Landing Page](screenshots/landing%20page.png)
+
+### Services Page
+![Services Page](screenshots/services%20page.png)
+
 ---
 
 ## Selected Code Snippets
