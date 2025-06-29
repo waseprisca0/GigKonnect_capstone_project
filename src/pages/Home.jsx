@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { workersAPI } from "../services/api";
 
 const Home = () => {
   const user = JSON.parse(localStorage.getItem('user'));
@@ -43,24 +44,28 @@ const Home = () => {
     }
   ];
 
-  // Get all workers from localStorage (simulate a database)
-  let allWorkers = [];
-  try {
-    if (workerProfile) {
-      allWorkers.push(workerProfile);
-    }
-  } catch (e) {}
+  const [workers, setWorkers] = useState([]);
+  const [filteredWorkers, setFilteredWorkers] = useState([]);
 
-  // For demo: in a real app, you would have an array of all workers in localStorage or from an API
+  useEffect(() => {
+    // Fetch all workers from backend
+    workersAPI.getAll().then((data) => setWorkers(data || []));
+  }, []);
+
+  useEffect(() => {
+    // Filter workers by selected category
+    if (selectedCategory) {
+      setFilteredWorkers(
+        workers.filter((worker) =>
+          worker.skills && worker.skills.includes(selectedCategory)
+        )
+      );
+    } else {
+      setFilteredWorkers(workers);
+    }
+  }, [workers, selectedCategory]);
 
   const [selectedCategory, setSelectedCategory] = useState(null);
-
-  // Filter workers by selected category
-  const filteredWorkers = selectedCategory
-    ? allWorkers.filter((worker) =>
-        worker.skills && worker.skills.includes(selectedCategory)
-      )
-    : [];
 
   return (
     <div className="bg-white">
