@@ -33,34 +33,49 @@ const apiCall = async (endpoint, options = {}) => {
   }
 };
 
-// Authentication API calls
+// Authentication API calls (for workers)
 export const authAPI = {
-  // Register user
+  // Register worker
   register: async (userData) => {
-    return apiCall('/auth/register', {
+    const data = await apiCall('/workers/register', {
       method: 'POST',
       body: JSON.stringify(userData),
     });
+    // Store full worker object in localStorage
+    if (data && data.id) {
+      localStorage.setItem('user', JSON.stringify(data));
+    }
+    return data;
   },
 
-  // Login user
+  // Login worker
   login: async (credentials) => {
-    return apiCall('/auth/login', {
+    const data = await apiCall('/workers/login', {
       method: 'POST',
       body: JSON.stringify(credentials),
     });
+    // Store JWT token and full worker object on successful login
+    if (data.token) {
+      localStorage.setItem('token', data.token);
+    }
+    if (data.worker) {
+      localStorage.setItem('user', JSON.stringify(data.worker));
+    }
+    return data;
   },
 
-  // Get current user
-  getCurrentUser: async () => {
-    return apiCall('/auth/me');
-  },
+  // Get current user (not implemented in backend)
+  // getCurrentUser: async () => {
+  //   return apiCall('/auth/me');
+  // },
 };
 
 // Workers API calls
 export const workersAPI = {
-  // Get all workers
+  // Get all workers by category
   getAll: async () => {
+    // This should call the backend endpoint that returns all workers
+    // or you can implement getByCategory for each category
     return apiCall('/workers');
   },
 

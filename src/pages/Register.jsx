@@ -10,12 +10,22 @@ const Register = () => {
     password: '',
     confirmPassword: '',
     userType: 'client', // 'client' or 'worker'
-    phone: ''
+    phone: '',
+    skill_category: '', // Only for worker
+    bio: '' // Only for worker
   });
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [apiError, setApiError] = useState('');
   const navigate = useNavigate();
+
+  const SKILL_OPTIONS = [
+    'nanny',
+    'driver',
+    'cook',
+    'electrician',
+    'mechanic'
+  ];
 
   useEffect(() => {
     if (localStorage.getItem('token')) {
@@ -75,6 +85,15 @@ const Register = () => {
       newErrors.phone = 'Phone number is required';
     }
 
+    if (formData.userType === 'worker') {
+      if (!formData.skill_category.trim()) {
+        newErrors.skill_category = 'Skill category is required';
+      }
+      if (!formData.bio.trim()) {
+        newErrors.bio = 'Bio is required';
+      }
+    }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -90,14 +109,34 @@ const Register = () => {
     setApiError('');
     
     try {
-      const response = await authAPI.register(formData);
-      
-      // Store token and user data
-      localStorage.setItem('token', response.token);
-      localStorage.setItem('user', JSON.stringify(response.user));
-      
-      // Redirect to dashboard
-      navigate('/dashboard');
+      if (formData.userType === 'worker') {
+        // Transform formData for worker registration
+        const workerData = {
+          name: `${formData.firstName} ${formData.lastName}`.trim(),
+          email: formData.email,
+          password: formData.password,
+          skill_category: formData.skill_category,
+          contact_info: formData.phone,
+          bio: formData.bio
+        };
+        const response = await authAPI.register(workerData);
+        // Clear previous user/token before storing new ones
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        if (response.token) {
+          localStorage.setItem('token', response.token);
+        }
+        if (response.worker) {
+          localStorage.setItem('user', JSON.stringify(response.worker));
+        } else if (response.user) {
+          localStorage.setItem('user', JSON.stringify(response.user));
+        } else {
+          localStorage.removeItem('user');
+        }
+        navigate('/dashboard');
+      } else {
+        setApiError('Client registration is not supported yet.');
+      }
     } catch (error) {
       console.error('Registration error:', error);
       setApiError(error.message || 'Registration failed. Please try again.');
@@ -114,8 +153,11 @@ const Register = () => {
             GigKonnect
           </Link>
           <h2 className="mt-6 text-3xl font-extrabold text-gray-900">
-            Create your account
+            Worker
           </h2>
+          <p className="mt-2 text-lg text-gray-600 font-semibold">
+            Registering to offer services
+          </p>
           <p className="mt-2 text-sm text-gray-600">
             Or{' '}
             <Link to="/login" className="font-medium text-blue-600 hover:text-blue-500">
@@ -134,106 +176,38 @@ const Register = () => {
           )}
 
           <form className="space-y-6" onSubmit={handleSubmit}>
-            {/* User Type Selection */}
+            {/* First Name */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-3">
-                I am a:
+              <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">
+                First name
               </label>
-              <div className="grid grid-cols-2 gap-3">
-                <label className="relative flex cursor-pointer rounded-lg border bg-white p-4 shadow-sm focus:outline-none">
-                  <input
-                    type="radio"
-                    name="userType"
-                    value="client"
-                    checked={formData.userType === 'client'}
-                    onChange={handleChange}
-                    className="sr-only"
-                  />
-                  <span className="flex flex-1">
-                    <span className="flex flex-col">
-                      <span className="block text-sm font-medium text-gray-900">Client</span>
-                      <span className="mt-1 flex items-center text-sm text-gray-500">
-                        Looking for workers
-                      </span>
-                    </span>
-                  </span>
-                  <span className={`pointer-events-none absolute -inset-px rounded-lg border-2 ${
-                    formData.userType === 'client' ? 'border-blue-500' : 'border-transparent'
-                  }`} />
-                </label>
-                <label className="relative flex cursor-pointer rounded-lg border bg-white p-4 shadow-sm focus:outline-none">
-                  <input
-                    type="radio"
-                    name="userType"
-                    value="worker"
-                    checked={formData.userType === 'worker'}
-                    onChange={handleChange}
-                    className="sr-only"
-                  />
-                  <span className="flex flex-1">
-                    <span className="flex flex-col">
-                      <span className="block text-sm font-medium text-gray-900">Worker</span>
-                      <span className="mt-1 flex items-center text-sm text-gray-500">
-                        Offering services
-                      </span>
-                    </span>
-                  </span>
-                  <span className={`pointer-events-none absolute -inset-px rounded-lg border-2 ${
-                    formData.userType === 'worker' ? 'border-blue-500' : 'border-transparent'
-                  }`} />
-                </label>
-              </div>
+              <input
+                id="firstName"
+                name="firstName"
+                type="text"
+                autoComplete="given-name"
+                value={formData.firstName}
+                onChange={handleChange}
+                className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-base focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all duration-150 shadow-sm placeholder-gray-400"
+              />
+              {errors.firstName && <div className="text-red-500 text-sm">{errors.firstName}</div>}
             </div>
 
-            {/* Name Fields */}
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-              <div>
-                <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">
-                  First name
-                </label>
-                <div className="mt-1">
-                  <input
-                    id="firstName"
-                    name="firstName"
-                    type="text"
-                    autoComplete="given-name"
-                    required
-                    value={formData.firstName}
-                    onChange={handleChange}
-                    className={`appearance-none block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm ${
-                      errors.firstName ? 'border-red-300' : 'border-gray-300'
-                    }`}
-                    placeholder="First name"
-                  />
-                  {errors.firstName && (
-                    <p className="mt-1 text-sm text-red-600">{errors.firstName}</p>
-                  )}
-                </div>
-              </div>
-
-              <div>
-                <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">
-                  Last name
-                </label>
-                <div className="mt-1">
-                  <input
-                    id="lastName"
-                    name="lastName"
-                    type="text"
-                    autoComplete="family-name"
-                    required
-                    value={formData.lastName}
-                    onChange={handleChange}
-                    className={`appearance-none block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm ${
-                      errors.lastName ? 'border-red-300' : 'border-gray-300'
-                    }`}
-                    placeholder="Last name"
-                  />
-                  {errors.lastName && (
-                    <p className="mt-1 text-sm text-red-600">{errors.lastName}</p>
-                  )}
-                </div>
-              </div>
+            {/* Last Name */}
+            <div>
+              <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">
+                Last name
+              </label>
+              <input
+                id="lastName"
+                name="lastName"
+                type="text"
+                autoComplete="family-name"
+                value={formData.lastName}
+                onChange={handleChange}
+                className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-base focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all duration-150 shadow-sm placeholder-gray-400"
+              />
+              {errors.lastName && <div className="text-red-500 text-sm">{errors.lastName}</div>}
             </div>
 
             {/* Email */}
@@ -241,133 +215,114 @@ const Register = () => {
               <label htmlFor="email" className="block text-sm font-medium text-gray-700">
                 Email address
               </label>
-              <div className="mt-1">
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  autoComplete="email"
-                  required
-                  value={formData.email}
-                  onChange={handleChange}
-                  className={`appearance-none block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm ${
-                    errors.email ? 'border-red-300' : 'border-gray-300'
-                  }`}
-                  placeholder="Enter your email"
-                />
-                {errors.email && (
-                  <p className="mt-1 text-sm text-red-600">{errors.email}</p>
-                )}
-              </div>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                autoComplete="email"
+                value={formData.email}
+                onChange={handleChange}
+                className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-base focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all duration-150 shadow-sm placeholder-gray-400"
+              />
+              {errors.email && <div className="text-red-500 text-sm">{errors.email}</div>}
             </div>
 
-            {/* Phone */}
+            {/* Password */}
+            <div>
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                Password
+              </label>
+              <input
+                id="password"
+                name="password"
+                type="password"
+                autoComplete="new-password"
+                value={formData.password}
+                onChange={handleChange}
+                className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-base focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all duration-150 shadow-sm placeholder-gray-400"
+              />
+              {errors.password && <div className="text-red-500 text-sm">{errors.password}</div>}
+            </div>
+
+            {/* Confirm Password */}
+            <div>
+              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
+                Confirm Password
+              </label>
+              <input
+                id="confirmPassword"
+                name="confirmPassword"
+                type="password"
+                autoComplete="new-password"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-base focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all duration-150 shadow-sm placeholder-gray-400"
+              />
+              {errors.confirmPassword && <div className="text-red-500 text-sm">{errors.confirmPassword}</div>}
+            </div>
+
+            {/* Phone/Contact Info */}
             <div>
               <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
                 Phone number
               </label>
-              <div className="mt-1">
-                <input
-                  id="phone"
-                  name="phone"
-                  type="tel"
-                  autoComplete="tel"
-                  required
-                  value={formData.phone}
-                  onChange={handleChange}
-                  className={`appearance-none block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm ${
-                    errors.phone ? 'border-red-300' : 'border-gray-300'
-                  }`}
-                  placeholder="Enter your phone number"
-                />
-                {errors.phone && (
-                  <p className="mt-1 text-sm text-red-600">{errors.phone}</p>
-                )}
-              </div>
-            </div>
-
-            {/* Password Fields */}
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-              <div>
-                <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                  Password
-                </label>
-                <div className="mt-1">
-                  <input
-                    id="password"
-                    name="password"
-                    type="password"
-                    autoComplete="new-password"
-                    required
-                    value={formData.password}
-                    onChange={handleChange}
-                    className={`appearance-none block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm ${
-                      errors.password ? 'border-red-300' : 'border-gray-300'
-                    }`}
-                    placeholder="Create a password"
-                  />
-                  {errors.password && (
-                    <p className="mt-1 text-sm text-red-600">{errors.password}</p>
-                  )}
-                </div>
-              </div>
-
-              <div>
-                <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
-                  Confirm password
-                </label>
-                <div className="mt-1">
-                  <input
-                    id="confirmPassword"
-                    name="confirmPassword"
-                    type="password"
-                    autoComplete="new-password"
-                    required
-                    value={formData.confirmPassword}
-                    onChange={handleChange}
-                    className={`appearance-none block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm ${
-                      errors.confirmPassword ? 'border-red-300' : 'border-gray-300'
-                    }`}
-                    placeholder="Confirm your password"
-                  />
-                  {errors.confirmPassword && (
-                    <p className="mt-1 text-sm text-red-600">{errors.confirmPassword}</p>
-                  )}
-                </div>
-              </div>
-            </div>
-
-            {/* Terms and Conditions */}
-            <div className="flex items-center">
               <input
-                id="terms"
-                name="terms"
-                type="checkbox"
-                required
-                className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                id="phone"
+                name="phone"
+                type="text"
+                autoComplete="tel"
+                value={formData.phone}
+                onChange={handleChange}
+                className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-base focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all duration-150 shadow-sm placeholder-gray-400"
               />
-              <label htmlFor="terms" className="ml-2 block text-sm text-gray-900">
-                I agree to the{' '}
-                <a href="#" className="text-blue-600 hover:text-blue-500">
-                  Terms and Conditions
-                </a>
-              </label>
+              {errors.phone && <div className="text-red-500 text-sm">{errors.phone}</div>}
             </div>
 
-            {/* Submit Button */}
+            {/* Skill Category */}
+            <div>
+              <label htmlFor="skill_category" className="block text-sm font-medium text-gray-700">
+                Skill Category
+              </label>
+              <select
+                id="skill_category"
+                name="skill_category"
+                value={formData.skill_category}
+                onChange={handleChange}
+                className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-base focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all duration-150 shadow-sm placeholder-gray-400"
+              >
+                <option value="">Select a skill</option>
+                {SKILL_OPTIONS.map((option) => (
+                  <option key={option} value={option}>{option.charAt(0).toUpperCase() + option.slice(1)}</option>
+                ))}
+              </select>
+              {errors.skill_category && <div className="text-red-500 text-sm">{errors.skill_category}</div>}
+            </div>
+
+            {/* Bio */}
+            <div>
+              <label htmlFor="bio" className="block text-sm font-medium text-gray-700">
+                Short Bio
+              </label>
+              <textarea
+                id="bio"
+                name="bio"
+                value={formData.bio}
+                onChange={handleChange}
+                maxLength={300}
+                className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-base focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all duration-150 shadow-sm placeholder-gray-400"
+                rows={4}
+              />
+              <div className="text-gray-500 text-xs">{formData.bio.length}/300 characters</div>
+              {errors.bio && <div className="text-red-500 text-sm">{errors.bio}</div>}
+            </div>
+
             <div>
               <button
                 type="submit"
                 disabled={isLoading}
-                className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
               >
-                {isLoading ? (
-                  <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                  </svg>
-                ) : null}
-                {isLoading ? 'Creating account...' : 'Create account'}
+                {isLoading ? 'Registering...' : 'Register'}
               </button>
             </div>
           </form>
