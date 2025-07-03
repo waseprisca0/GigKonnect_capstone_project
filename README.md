@@ -103,6 +103,8 @@ CREATE TABLE users (
 All services are hosted and run locally on your development machine for testing and development purposes.
 
 ---
+Link to the GitHub Repo: https://github.com/waseprisca0/GigKonnect_capstone_project
+Demo video for initial development: https://drive.google.com/file/d/1oNg2NLvihehDSqOliK85O2JJc_xib2hD/view?usp=sharing
 
 ## License
 MIT
