@@ -69,13 +69,29 @@ const Login = () => {
     
     try {
       const response = await authAPI.login(formData);
-      
-      // Store token and user data
-      localStorage.setItem('token', response.token);
-      localStorage.setItem('user', JSON.stringify(response.user));
-      
-      // Redirect to dashboard
-      navigate('/dashboard');
+      // Clear previous user/token before storing new ones
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      // Store token and user data (handle both worker and user keys)
+      if (response.token) {
+        localStorage.setItem('token', response.token);
+      }
+      if (response.worker) {
+        localStorage.setItem('user', JSON.stringify(response.worker));
+      } else if (response.user) {
+        localStorage.setItem('user', JSON.stringify(response.user));
+      } else {
+        localStorage.removeItem('user');
+      }
+      // Redirect based on user type
+      const userObj = response.worker || response.user;
+      if (userObj && userObj.skill_category) {
+        navigate('/profile');
+      } else if (userObj && userObj.is_admin) {
+        navigate('/admin');
+      } else {
+        navigate('/dashboard');
+      }
     } catch (error) {
       console.error('Login error:', error);
       setApiError(error.message || 'Login failed. Please try again.');

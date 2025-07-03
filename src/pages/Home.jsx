@@ -3,8 +3,10 @@ import { Link } from 'react-router-dom';
 import { workersAPI } from "../services/api";
 
 const Home = () => {
-  const user = JSON.parse(localStorage.getItem('user'));
-  const workerProfile = JSON.parse(localStorage.getItem('workerProfile'));
+  const userStr = localStorage.getItem('user');
+  const user = userStr && userStr !== 'undefined' && userStr !== 'null' ? JSON.parse(userStr) : null;
+  const workerProfileStr = localStorage.getItem('workerProfile');
+  const workerProfile = workerProfileStr && workerProfileStr !== 'undefined' && workerProfileStr !== 'null' ? JSON.parse(workerProfileStr) : null;
   
   const categories = [
     {
@@ -44,28 +46,34 @@ const Home = () => {
     }
   ];
 
-  const [workers, setWorkers] = useState([]);
-  const [filteredWorkers, setFilteredWorkers] = useState([]);
-
-  useEffect(() => {
-    // Fetch all workers from backend
-    workersAPI.getAll().then((data) => setWorkers(data || []));
-  }, []);
-
-  useEffect(() => {
-    // Filter workers by selected category
-    if (selectedCategory) {
-      setFilteredWorkers(
-        workers.filter((worker) =>
-          worker.skills && worker.skills.includes(selectedCategory)
-        )
-      );
-    } else {
-      setFilteredWorkers(workers);
-    }
-  }, [workers, selectedCategory]);
-
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const [workers, setWorkers] = useState([]);
+  const [loadingWorkers, setLoadingWorkers] = useState(false);
+  const [error, setError] = useState("");
+
+  // Fetch workers by category from backend
+  const fetchWorkersByCategory = async (categoryId) => {
+    setLoadingWorkers(true);
+    setError("");
+    try {
+      const data = await workersAPI.getByCategory(categoryId);
+      setWorkers(data);
+    } catch (err) {
+      setError("Failed to fetch workers");
+      setWorkers([]);
+    } finally {
+      setLoadingWorkers(false);
+    }
+  };
+
+  // When a category is selected, fetch workers for that category
+  useEffect(() => {
+    if (selectedCategory) {
+      fetchWorkersByCategory(selectedCategory);
+    } else {
+      setWorkers([]);
+    }
+  }, [selectedCategory]);
 
   return (
     <div className="bg-white">
@@ -76,7 +84,7 @@ const Home = () => {
             Find Trusted Gig Workers. Get the Job Done
           </h1>
           <p className="text-lg md:text-xl text-gray-600 mb-8">
-            Connect with skilled professionals - from nannies and cooks to mechanics and electricians.
+            Connecting You with Best Gig Workers.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a
@@ -110,7 +118,7 @@ const Home = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {categories.map((category) => {
               const isSelected = selectedCategory === category.id;
-              const noWorker = isSelected && filteredWorkers.length === 0;
+              const noWorker = isSelected && workers.length === 0;
               return (
                 <div
                   key={category.id}
@@ -153,21 +161,32 @@ const Home = () => {
           </div>
 
           {/* Worker List for Selected Category */}
-          {selectedCategory && filteredWorkers.length > 0 && (
+          {selectedCategory && (
             <div className="mt-12">
               <h3 className="text-2xl font-bold mb-4 text-center text-blue-700">
                 {categories.find((cat) => cat.id === selectedCategory)?.name} Workers
               </h3>
-              <ul className="space-y-4 max-w-lg mx-auto">
-                {filteredWorkers.map((worker, idx) => (
-                  <li key={idx} className="bg-white rounded-xl shadow p-4 border border-blue-100">
-                    <div className="font-bold text-lg text-blue-700">{worker.name}</div>
-                    <div className="text-gray-700">Skills: {worker.skills.join(', ')}</div>
-                    <div className="text-gray-700">Phone/WhatsApp: {worker.phone}</div>
-                    <div className="text-gray-700">Bio: {worker.bio}</div>
-                  </li>
-                ))}
-              </ul>
+              {loadingWorkers ? (
+                <div className="text-center text-blue-600 font-semibold">Loading workers...</div>
+              ) : error ? (
+                <div className="text-center text-red-600 font-semibold">{error}</div>
+              ) : workers.length > 0 ? (
+                <ul className="space-y-4 max-w-lg mx-auto">
+                  {workers.map((worker, idx) => (
+                    <li key={idx} className="bg-white rounded-xl shadow p-4 border border-blue-100 flex items-center justify-between">
+                      <Link
+                        to={`/profile/${worker.id}`}
+                        className="font-bold text-lg text-blue-700 hover:underline hover:text-blue-900 transition-colors px-4 py-2 rounded bg-blue-50 hover:bg-blue-100"
+                      >
+                        {worker.name}
+                      </Link>
+                      <span className="text-gray-700">{worker.skill_category}</span>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <div className="text-center text-red-600 font-semibold">No available worker</div>
+              )}
               <div className="text-center mt-6">
                 <button
                   className="bg-gray-100 px-4 py-2 rounded hover:bg-gray-200 border border-gray-300"
@@ -187,8 +206,8 @@ const Home = () => {
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">About GigKonnect</h2>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-              We're revolutionizing how people connect with skilled professionals. 
-              Our platform makes it easy to find reliable, verified workers for all your needs.
+              We're revolutionizing how people connect with casual workers. 
+              Our platform makes it easy to find reliable, verified workers for all needs.
             </p>
           </div>
 

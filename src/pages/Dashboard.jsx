@@ -3,9 +3,13 @@ import { useNavigate } from 'react-router-dom';
 
 const Dashboard = () => {
   const navigate = useNavigate();
-  const user = JSON.parse(localStorage.getItem('user'));
+  const userStr = localStorage.getItem('user');
+  const user = userStr && userStr !== 'undefined' && userStr !== 'null' ? JSON.parse(userStr) : null;
   const [profile, setProfile] = useState(null);
   const [showEdit, setShowEdit] = useState(false);
+
+  const workerProfileStr = localStorage.getItem('workerProfile');
+  const workerProfile = workerProfileStr && workerProfileStr !== 'undefined' && workerProfileStr !== 'null' ? JSON.parse(workerProfileStr) : null;
 
   useEffect(() => {
     if (!user) {
@@ -19,7 +23,6 @@ const Dashboard = () => {
       return;
     }
     
-    const workerProfile = JSON.parse(localStorage.getItem('workerProfile'));
     if (!workerProfile) {
       // If no worker profile exists, stay on dashboard but show create profile message
       setProfile(null);
