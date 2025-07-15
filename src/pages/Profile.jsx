@@ -61,107 +61,127 @@ const Profile = () => {
 
   if (!user) {
     return (
-      <div className="max-w-xl mx-auto mt-10 p-6 bg-white rounded shadow text-center">
-        <h2 className="text-2xl font-bold mb-4">Access Denied</h2>
-        <p className="text-gray-600 mb-4">Please log in to view your profile.</p>
-        <button
-          onClick={() => navigate('/login')}
-          className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700"
-        >
-          Go to Login
-        </button>
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-100 via-purple-100 to-white font-sans">
+        <div className="max-w-xl w-full p-8 bg-white rounded-2xl shadow-xl border border-blue-100 text-center">
+          <h2 className="text-3xl font-extrabold mb-4 text-blue-800">Access Denied</h2>
+          <p className="text-gray-600 mb-4">Please log in to view your profile.</p>
+          <button
+            onClick={() => navigate('/login')}
+            className="bg-blue-600 text-white px-6 py-2 rounded-lg font-semibold shadow hover:bg-blue-700 transition-colors"
+          >
+            Go to Login
+          </button>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="max-w-xl mx-auto mt-10 p-6 bg-white rounded shadow">
-      <h2 className="text-2xl font-bold mb-4">My Worker Profile</h2>
-      {success && (
-        <div className="mb-4 text-green-600 font-semibold">
-          Profile updated successfully!
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-100 via-purple-100 to-white font-sans">
+      <div className="w-full max-w-2xl mx-auto p-8 bg-white rounded-2xl shadow-xl border border-blue-100">
+        <div className="flex flex-col md:flex-row items-center md:items-start gap-8 mb-6">
+          {/* Avatar */}
+          <div className="flex-shrink-0 w-32 h-32 rounded-full bg-gradient-to-br from-blue-400 via-purple-300 to-blue-200 flex items-center justify-center text-5xl font-bold text-white shadow-md border-4 border-blue-200">
+            {user.name ? user.name.charAt(0).toUpperCase() : '?'}
+          </div>
+          <div className="flex-1 w-full">
+            <h2 className="text-3xl font-extrabold text-blue-800 mb-2 tracking-tight">My Worker Profile</h2>
+            {success && (
+              <div className="mb-4 text-green-600 font-semibold">Profile updated successfully!</div>
+            )}
+            {!isEditing ? (
+              <>
+                <div className="mb-4 text-lg text-gray-800">
+                  <div><span className="font-semibold text-blue-700">Name:</span> {user.name}</div>
+                  <div className="mt-1"><span className="font-semibold text-purple-700">Skill Category:</span> <span className="inline-block bg-purple-100 text-purple-700 px-3 py-1 rounded-full font-semibold">{user.skill_category}</span></div>
+                  <div className="mt-1"><span className="font-semibold text-blue-700">Contact Info:</span> {user.contact_info || <span className="text-gray-400">Not set</span>}</div>
+                  <div className="mt-1"><span className="font-semibold text-blue-700">Bio:</span> {user.bio || <span className="text-gray-400">Not set</span>}</div>
+                </div>
+                {user.contact_info && (
+                  <a
+                    href={`https://wa.me/${user.contact_info.replace(/[^\d]/g, '')}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-block bg-green-500 hover:bg-green-600 text-white font-semibold px-6 py-2 rounded-lg shadow transition-colors duration-150 mt-2"
+                  >
+                    <span role="img" aria-label="WhatsApp">💬</span> Chat me on WhatsApp
+                  </a>
+                )}
+                <button
+                  className="bg-gradient-to-r from-blue-500 to-purple-500 text-white px-6 py-2 rounded-lg font-semibold shadow hover:from-blue-600 hover:to-purple-600 transition-colors ml-4"
+                  onClick={handleEdit}
+                >
+                  Edit Profile
+                </button>
+              </>
+            ) : (
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <div>
+                  <label className="block font-medium text-blue-700">Name</label>
+                  <input
+                    type="text"
+                    name="name"
+                    value={form.name}
+                    onChange={handleChange}
+                    className="w-full border rounded px-3 py-2 focus:ring-2 focus:ring-blue-300"
+                  />
+                  {errors.name && <div className="text-red-500 text-sm">{errors.name}</div>}
+                </div>
+                <div>
+                  <label className="block font-medium text-purple-700">Skill Category</label>
+                  <input
+                    type="text"
+                    name="skill_category"
+                    value={form.skill_category}
+                    onChange={handleChange}
+                    className="w-full border rounded px-3 py-2 focus:ring-2 focus:ring-purple-300"
+                  />
+                  {errors.skill_category && <div className="text-red-500 text-sm">{errors.skill_category}</div>}
+                </div>
+                <div>
+                  <label className="block font-medium text-blue-700">Contact Info</label>
+                  <input
+                    type="text"
+                    name="contact_info"
+                    value={form.contact_info}
+                    onChange={handleChange}
+                    className="w-full border rounded px-3 py-2 focus:ring-2 focus:ring-blue-300"
+                  />
+                  {errors.contact_info && <div className="text-red-500 text-sm">{errors.contact_info}</div>}
+                </div>
+                <div>
+                  <label className="block font-medium text-blue-700">Short Bio</label>
+                  <textarea
+                    name="bio"
+                    value={form.bio}
+                    onChange={handleChange}
+                    maxLength={300}
+                    className="w-full border rounded px-3 py-2 focus:ring-2 focus:ring-blue-300"
+                    rows={4}
+                  />
+                  <div className="text-gray-500 text-xs">{form.bio.length}/300 characters</div>
+                  {errors.bio && <div className="text-red-500 text-sm">{errors.bio}</div>}
+                </div>
+                <div className="flex gap-3">
+                  <button
+                    type="submit"
+                    className="bg-gradient-to-r from-blue-500 to-purple-500 text-white px-6 py-2 rounded-lg font-semibold shadow hover:from-blue-600 hover:to-purple-600 transition-colors"
+                  >
+                    Save
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleCancel}
+                    className="bg-gray-300 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-400"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </form>
+            )}
+          </div>
         </div>
-      )}
-      {!isEditing ? (
-        <>
-          <div className="mb-4">
-            <div><strong>Name:</strong> {user.name}</div>
-            <div><strong>Skill Category:</strong> {user.skill_category}</div>
-            <div><strong>Contact Info:</strong> {user.contact_info || 'Not set'}</div>
-            <div><strong>Bio:</strong> {user.bio || 'Not set'}</div>
-          </div>
-          <button
-            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-            onClick={handleEdit}
-          >
-            Edit Profile
-          </button>
-        </>
-      ) : (
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block font-medium">Name</label>
-            <input
-              type="text"
-              name="name"
-              value={form.name}
-              onChange={handleChange}
-              className="w-full border rounded px-3 py-2"
-            />
-            {errors.name && <div className="text-red-500 text-sm">{errors.name}</div>}
-          </div>
-          <div>
-            <label className="block font-medium">Skill Category</label>
-            <input
-              type="text"
-              name="skill_category"
-              value={form.skill_category}
-              onChange={handleChange}
-              className="w-full border rounded px-3 py-2"
-            />
-            {errors.skill_category && <div className="text-red-500 text-sm">{errors.skill_category}</div>}
-          </div>
-          <div>
-            <label className="block font-medium">Contact Info</label>
-            <input
-              type="text"
-              name="contact_info"
-              value={form.contact_info}
-              onChange={handleChange}
-              className="w-full border rounded px-3 py-2"
-            />
-            {errors.contact_info && <div className="text-red-500 text-sm">{errors.contact_info}</div>}
-          </div>
-          <div>
-            <label className="block font-medium">Short Bio</label>
-            <textarea
-              name="bio"
-              value={form.bio}
-              onChange={handleChange}
-              maxLength={300}
-              className="w-full border rounded px-3 py-2"
-              rows={4}
-            />
-            <div className="text-gray-500 text-xs">{form.bio.length}/300 characters</div>
-            {errors.bio && <div className="text-red-500 text-sm">{errors.bio}</div>}
-          </div>
-          <div className="flex gap-3">
-            <button
-              type="submit"
-              className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700"
-            >
-              Save
-            </button>
-            <button
-              type="button"
-              onClick={handleCancel}
-              className="bg-gray-300 text-gray-700 px-6 py-2 rounded hover:bg-gray-400"
-            >
-              Cancel
-            </button>
-          </div>
-        </form>
-      )}
+      </div>
     </div>
   );
 };
