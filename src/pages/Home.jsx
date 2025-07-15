@@ -13,36 +13,43 @@ const Home = () => {
       id: 'nanny',
       name: 'Nannies',
       icon: '👶',
-      description: 'Professional childcare providers for your family. Experienced nannies offering safe, nurturing care for children of all ages.',
+      description: 'Nannies offer safe, nurturing care for children of all ages.',
       features: ['CPR Certified', 'Background Checked', 'Flexible Hours', 'Educational Activities']
     },
     {
       id: 'cook',
       name: 'Cooks',
       icon: '👨‍🍳',
-      description: 'Skilled chefs and home cooks ready to prepare delicious meals. From daily cooking to special events and dietary requirements.',
+      description: 'Cooks prepare delicious meals for daily needs or special events.',
       features: ['Meal Planning', 'Dietary Restrictions', 'Event Catering', 'Fresh Ingredients']
     },
     {
       id: 'mechanic',
       name: 'Mechanics',
       icon: '🔧',
-      description: 'Certified auto mechanics providing reliable vehicle maintenance and repair services. Expert diagnostics and quality workmanship.',
+      description: 'Mechanics help with vehicle maintenance, repairs, and diagnostics.',
       features: ['Diagnostic Services', 'Preventive Maintenance', 'Emergency Repairs', 'Warranty Work']
     },
     {
       id: 'driver',
       name: 'Drivers',
       icon: '🚗',
-      description: 'Professional drivers for all your transportation needs. Safe, reliable service for commuting, events, and special occasions.',
+      description: 'Drivers provide safe, reliable transportation for commuting and events.',
       features: ['Airport Transfers', 'Event Transportation', 'Daily Commuting', 'Luxury Vehicles']
     },
     {
       id: 'electrician',
       name: 'Electricians',
       icon: '⚡',
-      description: 'Licensed electricians for residential and commercial electrical work. Safety-focused professionals for all electrical needs.',
+      description: 'Electricians handle installations, repairs, and electrical work for homes and businesses.',
       features: ['Installation', 'Repairs', 'Safety Inspections', 'Emergency Service']
+    },
+    {
+      id: 'cleaner',
+      name: 'Cleaners',
+      icon: '🧹',
+      description: 'Cleaners keep homes, offices, and events spotless and organized.',
+      features: ['Deep Cleaning', 'Move-in/Move-out', 'Eco-friendly Products', 'Flexible Scheduling']
     }
   ];
 
@@ -76,27 +83,23 @@ const Home = () => {
   }, [selectedCategory]);
 
   return (
-    <div className="bg-white">
+    <div className="min-h-screen bg-gradient-to-br from-blue-200 via-blue-100 to-purple-100 font-sans">
       {/* Hero Section */}
-      <section className="py-16 bg-blue-50 border-b">
-        <div className="max-w-4xl mx-auto px-4 text-center">
-          <h1 className="text-3xl md:text-4xl font-extrabold text-blue-700 mb-4">
-            Find Trusted Gig Workers. Get the Job Done
-          </h1>
-          <p className="text-lg md:text-xl text-gray-600 mb-8">
-            Connecting You with Best Gig Workers.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+      <section className="py-10 bg-gradient-to-r from-blue-600 via-blue-400 to-blue-300">
+        <div className="max-w-4xl mx-auto px-4 text-left">
+          <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-4 drop-shadow-lg">Find Trusted Gig Workers</h1>
+          <p className="text-lg md:text-2xl text-blue-100 mb-8 font-medium">Connecting you with the best gig workers for every need.</p>
+          <div className="flex flex-col sm:flex-row gap-4">
             <a
               href="#services"
-              className="bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors shadow"
+              className="bg-white text-blue-700 px-8 py-3 rounded-lg font-semibold hover:bg-blue-50 transition-colors shadow border border-blue-200"
             >
               Browse Services
             </a>
             {!user && (
               <Link
                 to="/register"
-                className="border-2 border-blue-600 text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-blue-600 hover:text-white transition-colors shadow"
+                className="bg-blue-700 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-800 transition-colors shadow border border-blue-800"
               >
                 Sign Up
               </Link>
@@ -106,47 +109,34 @@ const Home = () => {
       </section>
 
       {/* Services Section */}
-      <section id="services" className="py-16">
-        <div className="max-w-7xl mx-auto px-4">
+      <section id="services" className="py-8">
+        <div className="max-w-5xl mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Our Services</h2>
-            <p className="text-lg text-gray-500 max-w-3xl mx-auto">
+            <h2 className="text-3xl font-bold text-blue-900 mb-4">Our Services</h2>
+            <p className="text-lg text-blue-700 max-w-3xl mx-auto">
               Discover a wide range of professional services tailored to meet your needs. All our workers are verified, experienced, and ready to help.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
             {categories.map((category) => {
               const isSelected = selectedCategory === category.id;
               const noWorker = isSelected && workers.length === 0;
               return (
                 <div
                   key={category.id}
-                  className={`bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 p-6 cursor-pointer flex flex-col items-center border ${isSelected ? 'border-blue-600' : 'border-gray-200'}`}
+                  className={`bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-shadow duration-300 p-8 cursor-pointer flex flex-col items-center border-2 ${isSelected ? 'border-blue-500' : 'border-transparent'}`}
                   onClick={() => setSelectedCategory(category.id)}
                 >
                   <div className="text-center mb-4">
-                    <div className="text-5xl mb-3">{category.icon}</div>
-                    <h3 className="text-xl font-semibold text-gray-900 mb-2">{category.name}</h3>
+                    <div className="text-6xl mb-3">{category.icon}</div>
+                    <h3 className="text-2xl font-bold text-blue-800 mb-2">{category.name}</h3>
                   </div>
-                  <p className="text-gray-500 mb-4 text-center">
+                  <p className="text-blue-700 mb-4 text-center">
                     {category.description}
                   </p>
-                  <div className="space-y-2">
-                    <h4 className="font-medium text-gray-900 text-sm">What's included:</h4>
-                    <ul className="space-y-1">
-                      {category.features.map((feature, index) => (
-                        <li key={index} className="flex items-center text-sm text-gray-600">
-                          <svg className="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                          </svg>
-                          {feature}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                  <div className="mt-6 text-center flex items-center justify-center gap-2">
-                    <button className="inline-block bg-blue-600 text-white px-6 py-2 rounded-md text-sm font-medium hover:bg-blue-700 transition-colors shadow">
+                  <div className="mt-6 text-center flex items-center justify-center gap-2 w-full">
+                    <button className="inline-block bg-blue-600 text-white px-6 py-2 rounded-lg text-base font-medium hover:bg-blue-700 transition-colors shadow">
                       Find {category.name}
                     </button>
                     {noWorker && (
@@ -162,7 +152,7 @@ const Home = () => {
 
           {/* Worker List for Selected Category */}
           {selectedCategory && (
-            <div className="mt-12">
+            <div className="mt-16">
               <h3 className="text-2xl font-bold mb-4 text-center text-blue-700">
                 {categories.find((cat) => cat.id === selectedCategory)?.name} Workers
               </h3>
@@ -180,7 +170,7 @@ const Home = () => {
                       >
                         {worker.name}
                       </Link>
-                      <span className="text-gray-700">{worker.skill_category}</span>
+                      <span className="text-blue-700">{worker.skill_category}</span>
                     </li>
                   ))}
                 </ul>
@@ -201,11 +191,11 @@ const Home = () => {
       </section>
 
       {/* About Section */}
-      <section id="about" className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section id="about" className="py-8 bg-white">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">About GigKonnect</h2>
-            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+            <h2 className="text-3xl font-bold text-blue-900 mb-4">About GigKonnect</h2>
+            <p className="text-lg text-blue-700 max-w-3xl mx-auto">
               We're revolutionizing how people connect with casual workers. 
               Our platform makes it easy to find reliable, verified workers for all needs.
             </p>
@@ -218,8 +208,8 @@ const Home = () => {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">Verified Workers</h3>
-              <p className="text-gray-600">
+              <h3 className="text-xl font-semibold text-blue-900 mb-2">Verified Workers</h3>
+              <p className="text-blue-700">
                 All workers undergo background checks and verification to ensure your safety and peace of mind.
               </p>
             </div>
@@ -230,8 +220,8 @@ const Home = () => {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                 </svg>
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">Quick & Easy</h3>
-              <p className="text-gray-600">
+              <h3 className="text-xl font-semibold text-blue-900 mb-2">Quick & Easy</h3>
+              <p className="text-blue-700">
                 Find and book workers in minutes. Our streamlined process saves you time and hassle.
               </p>
             </div>
@@ -242,8 +232,8 @@ const Home = () => {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                 </svg>
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">Quality Service</h3>
-              <p className="text-gray-600">
+              <h3 className="text-xl font-semibold text-blue-900 mb-2">Quality Service</h3>
+              <p className="text-blue-700">
                 We maintain high standards for all workers to ensure you receive exceptional service every time.
               </p>
             </div>
@@ -252,8 +242,8 @@ const Home = () => {
       </section>
 
       {/* CTA Section - this should be the last section before the footer */}
-      <section className="bg-gray-900 text-white py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <section className="bg-gray-900 text-white py-8">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold mb-4">Ready to Get Started?</h2>
           <p className="text-xl text-gray-300 mb-8">
             Join thousands of satisfied clients who found their perfect worker on GigKonnect

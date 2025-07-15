@@ -9,7 +9,7 @@ const Navbar = () => {
   const isActive = (path) => location.pathname === path;
 
   return (
-    <nav className="bg-blue-600 text-white shadow-lg">
+    <nav className="bg-blue-500 text-white shadow-lg">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo and Profile */}
@@ -22,8 +22,8 @@ const Navbar = () => {
                 to="/profile"
                 className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
                   isActive('/profile')
-                    ? 'bg-blue-700 text-white'
-                    : 'text-blue-100 hover:bg-blue-500 hover:text-white'
+                    ? 'bg-blue-600 text-white'
+                    : 'text-blue-100 hover:bg-blue-400 hover:text-white'
                 }`}
               >
                 Profile
