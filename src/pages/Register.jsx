@@ -9,7 +9,6 @@ const Register = () => {
     email: '',
     password: '',
     confirmPassword: '',
-    userType: 'client', // 'client' or 'worker'
     phone: '',
     skill_category: '', // Only for worker
     bio: '' // Only for worker
@@ -84,14 +83,11 @@ const Register = () => {
     if (!formData.phone.trim()) {
       newErrors.phone = 'Phone number is required';
     }
-
-    if (formData.userType === 'worker') {
-      if (!formData.skill_category.trim()) {
-        newErrors.skill_category = 'Skill category is required';
-      }
-      if (!formData.bio.trim()) {
-        newErrors.bio = 'Bio is required';
-      }
+    if (!formData.skill_category.trim()) {
+      newErrors.skill_category = 'Skill category is required';
+    }
+    if (!formData.bio.trim()) {
+      newErrors.bio = 'Bio is required';
     }
 
     setErrors(newErrors);
@@ -100,43 +96,35 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
     if (!validateForm()) {
       return;
     }
-
     setIsLoading(true);
     setApiError('');
-    
     try {
-      if (formData.userType === 'worker') {
-        // Transform formData for worker registration
-        const workerData = {
-          name: `${formData.firstName} ${formData.lastName}`.trim(),
-          email: formData.email,
-          password: formData.password,
-          skill_category: formData.skill_category,
-          contact_info: formData.phone,
-          bio: formData.bio
-        };
-        const response = await authAPI.register(workerData);
-        // Clear previous user/token before storing new ones
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
-        if (response.token) {
-          localStorage.setItem('token', response.token);
-        }
-        if (response.worker) {
-          localStorage.setItem('user', JSON.stringify(response.worker));
-        } else if (response.user) {
-          localStorage.setItem('user', JSON.stringify(response.user));
-        } else {
-          localStorage.removeItem('user');
-        }
-        navigate('/dashboard');
-      } else {
-        setApiError('Client registration is not supported yet.');
+      // Always register as worker
+      const workerData = {
+        name: `${formData.firstName} ${formData.lastName}`.trim(),
+        email: formData.email,
+        password: formData.password,
+        skill_category: formData.skill_category,
+        contact_info: formData.phone,
+        bio: formData.bio
+      };
+      const response = await authAPI.register(workerData);
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      if (response.token) {
+        localStorage.setItem('token', response.token);
       }
+      if (response.worker) {
+        localStorage.setItem('user', JSON.stringify(response.worker));
+      } else if (response.user) {
+        localStorage.setItem('user', JSON.stringify(response.user));
+      } else {
+        localStorage.removeItem('user');
+      }
+      navigate('/dashboard');
     } catch (error) {
       console.error('Registration error:', error);
       setApiError(error.message || 'Registration failed. Please try again.');
