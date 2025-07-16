@@ -8,7 +8,6 @@ const Register = () => {
     lastName: '',
     email: '',
     password: '',
-    confirmPassword: '',
     phone: '',
     skill_category: '', // Only for worker
     bio: '' // Only for worker
@@ -74,12 +73,6 @@ const Register = () => {
       newErrors.password = 'Password must be at least 6 characters';
     }
 
-    if (!formData.confirmPassword) {
-      newErrors.confirmPassword = 'Please confirm your password';
-    } else if (formData.password !== formData.confirmPassword) {
-      newErrors.confirmPassword = 'Passwords do not match';
-    }
-
     if (!formData.phone.trim()) {
       newErrors.phone = 'Phone number is required';
     }
@@ -134,19 +127,19 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-br from-blue-200 via-blue-100 to-purple-100 flex flex-col justify-center py-8 sm:px-4 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <div className="text-center">
-          <Link to="/" className="text-3xl font-bold text-blue-600">
+          <Link to="/" className="text-2xl font-bold text-blue-600">
             GigKonnect
           </Link>
-          <h2 className="mt-6 text-3xl font-extrabold text-gray-900">
+          <h2 className="mt-4 text-2xl font-extrabold text-gray-900">
             Worker
           </h2>
-          <p className="mt-2 text-lg text-gray-600 font-semibold">
+          <p className="mt-1 text-base text-gray-600 font-semibold">
             Registering to offer services
           </p>
-          <p className="mt-2 text-sm text-gray-600">
+          <p className="mt-1 text-xs text-gray-600">
             Or{' '}
             <Link to="/login" className="font-medium text-blue-600 hover:text-blue-500">
               sign in to your existing account
@@ -155,47 +148,47 @@ const Register = () => {
         </div>
       </div>
 
-      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+      <div className="mt-4 sm:mx-auto sm:w-full sm:max-w-md">
+        <div className="bg-white py-6 px-3 shadow sm:rounded-lg sm:px-6">
           {apiError && (
             <div className="mb-4 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
               {apiError}
             </div>
           )}
 
-          <form className="space-y-6" onSubmit={handleSubmit}>
-            {/* First Name */}
-            <div>
-              <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">
-                First name
-              </label>
-              <input
-                id="firstName"
-                name="firstName"
-                type="text"
-                autoComplete="given-name"
-                value={formData.firstName}
-                onChange={handleChange}
-                className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-base focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all duration-150 shadow-sm placeholder-gray-400"
-              />
-              {errors.firstName && <div className="text-red-500 text-sm">{errors.firstName}</div>}
-            </div>
-
-            {/* Last Name */}
-            <div>
-              <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">
-                Last name
-              </label>
-              <input
-                id="lastName"
-                name="lastName"
-                type="text"
-                autoComplete="family-name"
-                value={formData.lastName}
-                onChange={handleChange}
-                className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-base focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all duration-150 shadow-sm placeholder-gray-400"
-              />
-              {errors.lastName && <div className="text-red-500 text-sm">{errors.lastName}</div>}
+          <form className="space-y-4" onSubmit={handleSubmit}>
+            {/* First Name and Last Name on the same row */}
+            <div className="flex gap-2">
+              <div className="w-1/2">
+                <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">
+                  First name
+                </label>
+                <input
+                  id="firstName"
+                  name="firstName"
+                  type="text"
+                  autoComplete="given-name"
+                  value={formData.firstName}
+                  onChange={handleChange}
+                  className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-2 py-1 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all duration-150 shadow-sm placeholder-gray-400"
+                />
+                {errors.firstName && <div className="text-red-500 text-sm">{errors.firstName}</div>}
+              </div>
+              <div className="w-1/2">
+                <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">
+                  Last name
+                </label>
+                <input
+                  id="lastName"
+                  name="lastName"
+                  type="text"
+                  autoComplete="family-name"
+                  value={formData.lastName}
+                  onChange={handleChange}
+                  className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-2 py-1 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all duration-150 shadow-sm placeholder-gray-400"
+                />
+                {errors.lastName && <div className="text-red-500 text-sm">{errors.lastName}</div>}
+              </div>
             </div>
 
             {/* Email */}
@@ -210,7 +203,7 @@ const Register = () => {
                 autoComplete="email"
                 value={formData.email}
                 onChange={handleChange}
-                className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-base focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all duration-150 shadow-sm placeholder-gray-400"
+                className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-2 py-1 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all duration-150 shadow-sm placeholder-gray-400"
               />
               {errors.email && <div className="text-red-500 text-sm">{errors.email}</div>}
             </div>
@@ -227,26 +220,9 @@ const Register = () => {
                 autoComplete="new-password"
                 value={formData.password}
                 onChange={handleChange}
-                className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-base focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all duration-150 shadow-sm placeholder-gray-400"
+                className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-2 py-1 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all duration-150 shadow-sm placeholder-gray-400"
               />
               {errors.password && <div className="text-red-500 text-sm">{errors.password}</div>}
-            </div>
-
-            {/* Confirm Password */}
-            <div>
-              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
-                Confirm Password
-              </label>
-              <input
-                id="confirmPassword"
-                name="confirmPassword"
-                type="password"
-                autoComplete="new-password"
-                value={formData.confirmPassword}
-                onChange={handleChange}
-                className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-base focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all duration-150 shadow-sm placeholder-gray-400"
-              />
-              {errors.confirmPassword && <div className="text-red-500 text-sm">{errors.confirmPassword}</div>}
             </div>
 
             {/* Phone/Contact Info */}
@@ -261,7 +237,7 @@ const Register = () => {
                 autoComplete="tel"
                 value={formData.phone}
                 onChange={handleChange}
-                className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-base focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all duration-150 shadow-sm placeholder-gray-400"
+                className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-2 py-1 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all duration-150 shadow-sm placeholder-gray-400"
               />
               {errors.phone && <div className="text-red-500 text-sm">{errors.phone}</div>}
             </div>
@@ -276,9 +252,9 @@ const Register = () => {
                 name="skill_category"
                 value={formData.skill_category}
                 onChange={handleChange}
-                className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-base focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all duration-150 shadow-sm placeholder-gray-400"
+                className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-2 py-1 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all duration-150 shadow-sm placeholder-gray-400"
               >
-                <option value="">Select a skill</option>
+                <option value="" disabled className="text-gray-400 bg-gray-100">Select a skill</option>
                 {SKILL_OPTIONS.map((option) => (
                   <option key={option} value={option}>{option.charAt(0).toUpperCase() + option.slice(1)}</option>
                 ))}
@@ -289,7 +265,7 @@ const Register = () => {
             {/* Bio */}
             <div>
               <label htmlFor="bio" className="block text-sm font-medium text-gray-700">
-                Short Bio
+                Biography
               </label>
               <textarea
                 id="bio"
@@ -297,7 +273,7 @@ const Register = () => {
                 value={formData.bio}
                 onChange={handleChange}
                 maxLength={300}
-                className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-base focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all duration-150 shadow-sm placeholder-gray-400"
+                className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-2 py-1 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all duration-150 shadow-sm placeholder-gray-400"
                 rows={4}
               />
               <div className="text-gray-500 text-xs">{formData.bio.length}/300 characters</div>
@@ -308,7 +284,7 @@ const Register = () => {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                className="w-full flex justify-center py-1 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
               >
                 {isLoading ? 'Registering...' : 'Register'}
               </button>

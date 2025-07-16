@@ -62,7 +62,7 @@ const WorkerProfile = () => {
                 href={`https://wa.me/${worker.contact_info.replace(/[^\d]/g, '')}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-block bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white font-semibold px-6 py-2 rounded-lg shadow transition-colors duration-150 mt-2"
+                className="inline-block bg-green-500 hover:bg-green-600 text-white font-semibold px-6 py-2 rounded-lg shadow transition-colors duration-150 mt-2"
               >
                 💬 Chat me on WhatsApp
               </a>
