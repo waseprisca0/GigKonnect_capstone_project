@@ -1,5 +1,5 @@
-const API_BASE_URL = 'http://localhost:5000/api';
-
+const API_BASE_URL = 'https://gigkonnect-backend.onrender.com/api';
+  // const PRODUCTION_API_BASE_URL = 'https://gigkonnect-backend.onrender.com/api';
 // Helper function to make API calls
 const apiCall = async (endpoint, options = {}) => {
   const url = `${API_BASE_URL}${endpoint}`;
