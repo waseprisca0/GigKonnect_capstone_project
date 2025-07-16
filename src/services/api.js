@@ -88,6 +88,14 @@ export const workersAPI = {
   getById: async (workerId) => {
     return apiCall(`/workers/${workerId}`);
   },
+
+  // Update worker by ID
+  update: async (workerId, updateData) => {
+    return apiCall(`/workers/${workerId}`, {
+      method: 'PUT',
+      body: JSON.stringify(updateData),
+    });
+  },
 };
 
 // Categories API calls

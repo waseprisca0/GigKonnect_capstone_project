@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { workersAPI } from '../services/api';
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -48,15 +49,18 @@ const Profile = () => {
     setErrors({});
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
-    // Update user in localStorage (simulate backend update)
-    const updatedUser = { ...user, ...form };
-    localStorage.setItem('user', JSON.stringify(updatedUser));
-    setIsEditing(false);
-    setSuccess(true);
-    window.location.reload(); // Ensure UI updates everywhere
+    try {
+      const updatedWorker = await workersAPI.update(user.id, form);
+      localStorage.setItem('user', JSON.stringify(updatedWorker));
+      setIsEditing(false);
+      setSuccess(true);
+      window.location.reload();
+    } catch (error) {
+      setErrors({ api: 'Failed to update profile. Please try again.' });
+    }
   };
 
   if (!user) {
@@ -85,7 +89,7 @@ const Profile = () => {
             {user.name ? user.name.charAt(0).toUpperCase() : '?'}
           </div>
           <div className="flex-1 w-full">
-            <h2 className="text-3xl font-extrabold text-blue-800 mb-2 tracking-tight">My Worker Profile</h2>
+            <h2 className="text-xl font-bold mb-4 text-blue-800">My Profile</h2>
             {success && (
               <div className="mb-4 text-green-600 font-semibold">Profile updated successfully!</div>
             )}
@@ -97,7 +101,8 @@ const Profile = () => {
                   <div className="mt-1"><span className="font-semibold text-blue-700">Contact Info:</span> {user.contact_info || <span className="text-gray-400">Not set</span>}</div>
                   <div className="mt-1"><span className="font-semibold text-blue-700">Bio:</span> {user.bio || <span className="text-gray-400">Not set</span>}</div>
                 </div>
-                {user.contact_info && (
+                {/* Only show WhatsApp link if not viewing own profile */}
+                {user.contact_info && false && (
                   <a
                     href={`https://wa.me/${user.contact_info.replace(/[^\d]/g, '')}`}
                     target="_blank"
