@@ -9,26 +9,20 @@ const Home = () => {
   const workerProfile = workerProfileStr && workerProfileStr !== 'undefined' && workerProfileStr !== 'null' ? JSON.parse(workerProfileStr) : null;
   
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-200 via-blue-100 to-purple-100 font-sans relative overflow-hidden scroll-smooth">
+    <div className="min-h-screen bg-gradient-to-br from-blue-500 via-blue-300 to-purple-100 font-sans relative overflow-hidden scroll-smooth">
       {/* Hero Section */}
       <section className="flex items-center justify-center min-h-screen h-screen py-0 relative overflow-hidden">
-        <div className="absolute inset-0 z-0 pointer-events-none">
+        <div className="absolute bottom-0 left-0 w-full h-80 z-0 pointer-events-none">
           <svg className="w-full h-full" viewBox="0 0 1440 320" fill="none" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-            <path
-              fill="#2563eb" // More vibrant blue
-              fillOpacity="0.7"
-              d="
-                M0,224L80,208C160,192,320,160,480,154.7C640,149,800,171,960,186.7C1120,203,1280,213,1360,218.7L1440,224L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z
-              "
-            />
-            {/* Optionally, add a second path for more depth */}
-            <path
-              fill="#3b82f6"
-              fillOpacity="0.5"
-              d="
-                M0,288L80,272C160,256,320,224,480,213.3C640,203,800,213,960,229.3C1120,245,1280,267,1360,277.3L1440,288L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z
-              "
-            />
+            <path fill="#2563eb" fillOpacity="0.7">
+              <animate attributeName="d" dur="8s" repeatCount="indefinite"
+                values="
+                  M0,224L80,208C160,192,320,160,480,154.7C640,149,800,171,960,186.7C1120,203,1280,213,1360,218.7L1440,224L1440,320L0,320Z;
+                  M0,192L80,186.7C160,181,320,171,480,154.7C640,139,800,117,960,128C1120,139,1280,181,1360,202.7L1440,224L1440,320L0,320Z;
+                  M0,224L80,208C160,192,320,160,480,154.7C640,149,800,171,960,186.7C1120,203,1280,213,1360,218.7L1440,224L1440,320L0,320Z
+                "
+              />
+            </path>
           </svg>
         </div>
         {/* Hero Content */}
