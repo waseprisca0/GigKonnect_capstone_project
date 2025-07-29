@@ -52,9 +52,11 @@ const Services = () => {
   const [workers, setWorkers] = useState([]);
   const [loadingWorkers, setLoadingWorkers] = useState(false);
   const [error, setError] = useState("");
+  const [loadingCategory, setLoadingCategory] = useState(null);
 
   // Fetch workers by category from backend
   const fetchWorkersByCategory = async (categoryId) => {
+    setLoadingCategory(categoryId);
     setLoadingWorkers(true);
     setError("");
     try {
@@ -65,6 +67,7 @@ const Services = () => {
       setWorkers([]);
     } finally {
       setLoadingWorkers(false);
+      setLoadingCategory(null);
     }
   };
 
@@ -106,10 +109,21 @@ const Services = () => {
                     {category.description}
                   </p>
                   <div className="mt-6 text-center flex items-center justify-center gap-2 w-full">
-                    <button className="inline-block bg-blue-600 text-white px-6 py-2 rounded-lg text-base font-medium hover:bg-blue-700 transition-colors shadow">
+                    <button
+                      className="inline-block bg-blue-600 text-white px-6 py-2 rounded-lg text-base font-medium hover:bg-blue-700 transition-colors shadow flex items-center gap-2"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        fetchWorkersByCategory(category.id);
+                        setSelectedCategory(category.id);
+                      }}
+                      disabled={loadingCategory === category.id}
+                    >
                       Find {category.name}
+                      {loadingCategory === category.id && (
+                        <span className="ml-2 animate-spin inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full"></span>
+                      )}
                     </button>
-                    {noWorker && (
+                    {noWorker && !loadingWorkers && (
                       <span className="ml-2 bg-red-100 text-red-700 font-semibold rounded-full px-3 py-1 text-xs shadow-sm">
                         No available worker
                       </span>
