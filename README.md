@@ -3,7 +3,7 @@
 A platform to connect clients with trusted gig workers for various services.
 
 ## Project Link
-https://gig-konnect-capstone-project-a9m4j1ode.vercel.app/
+https://gig-konnect-capstone-project.vercel.app/
 ---
 ## Video demonstration Link
 https://drive.google.com/file/d/11rHuknKVeVcLTZtOfht0CEQXDG2arwd1/view?usp=sharing
