@@ -40,7 +40,7 @@ const Navbar = () => {
               {user ? (
                 <>
                   <span
-                    className="px-3 py-2 rounded-md bg-white text-blue-600 flex items-center justify-center font-bold text-base md:text-lg"
+                    className="px-3 py-1 rounded bg-white text-blue-600 flex items-center justify-center font-bold text-base md:text-lg"
                     title="Profile"
                   >
                     {user.first_name
@@ -99,8 +99,8 @@ const Navbar = () => {
         {/* Mobile Navigation */}
         {isMenuOpen && (
           <div className="md:hidden">
-            <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-              {user && (
+            <div className="px-2 pt-1 pb-[5rem] space-y-1 sm:px-3">
+              {/* {user && (
                 <Link
                   to="/profile"
                   className={`block px-3 py-2 rounded-md text-base font-medium ${
@@ -112,13 +112,13 @@ const Navbar = () => {
                 >
                   Profile
                 </Link>
-              )}
-              <div className="pt-4 pb-3 border-t border-blue-500">
+              )} */}
+              <div className="pt-4 pb-3 bg-red">
                 {user ? (
                   <div className="relative">
                     <button
                       onClick={() => setIsMenuOpen(!isMenuOpen)}
-                      className="w-8 h-8 md:w-9 md:h-9 rounded-full bg-white text-blue-600 flex items-center justify-center font-bold text-base md:text-lg focus:outline-none"
+                      className="w-auto px-2 h-8 md:w-9 md:h-9 rounded bg-white text-blue-600 flex items-center justify-center font-bold text-base md:text-lg focus:outline-none"
                       title="Profile"
                     >
                       {user.first_name
@@ -128,7 +128,7 @@ const Navbar = () => {
                           : 'User'}
                     </button>
                     {isMenuOpen && (
-                      <div className="absolute right-0 mt-2 w-40 bg-white rounded shadow-lg py-2 z-50">
+                      <div className="absolute left-0 mt-2 w-80 bg-white rounded shadow-lg py-2 z-50">
                         <button
                           onClick={() => {
                             localStorage.removeItem('token');

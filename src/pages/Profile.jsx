@@ -81,43 +81,42 @@ const Profile = () => {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-100 via-purple-100 to-white font-sans">
-      <div className="w-full max-w-2xl mx-auto p-8 bg-white rounded-2xl shadow-xl border border-blue-100">
-        <div className="flex flex-col md:flex-row items-center md:items-start gap-8 mb-6">
+    <div className="min-h-screen flex bg-gradient-to-br from-blue-100 via-purple-100 to-white font-sans">
+      <div className="w-full max-w-3xl mx-auto p-8 bg-white rounded-2xl shadow-xl border border-blue-100">
+        <div className="flex flex-col items-center gap-6">
           {/* Avatar */}
-          <div className="flex-shrink-0 w-32 h-32 rounded-full bg-gradient-to-br from-blue-400 via-purple-300 to-blue-200 flex items-center justify-center text-5xl font-bold text-white shadow-md border-4 border-blue-200">
+          <div className="w-32 h-32 rounded-full bg-gradient-to-br from-blue-400 via-purple-300 to-blue-200 flex items-center justify-center text-5xl font-bold text-white shadow-md border-4 border-blue-200">
             {user.name ? user.name.charAt(0).toUpperCase() : '?'}
           </div>
-          <div className="flex-1 w-full">
-            <h2 className="text-xl font-bold mb-4 text-blue-800">My Profile</h2>
+
+          {/* Text and Form Block */}
+          <div className="w-full max-w-xl text-left">
+            <h2 className="text-2xl font-bold mb-4 text-blue-800 text-center">{user.name}</h2>
+
             {success && (
-              <div className="mb-4 text-green-600 font-semibold">Profile updated successfully!</div>
+              <div className="mb-4 text-green-600 font-semibold text-center">Profile updated successfully!</div>
             )}
+
             {!isEditing ? (
               <>
-                <div className="mb-4 text-lg text-gray-800">
-                  <div><span className="font-semibold text-blue-700">Name:</span> {user.name}</div>
-                  <div className="mt-1"><span className="font-semibold text-purple-700">Skill Category:</span> <span className="inline-block bg-purple-100 text-purple-700 px-3 py-1 rounded-full font-semibold">{user.skill_category}</span></div>
-                  <div className="mt-1"><span className="font-semibold text-blue-700">Contact Info:</span> {user.contact_info || <span className="text-gray-400">Not set</span>}</div>
-                  <div className="mt-1"><span className="font-semibold text-blue-700">Bio:</span> {user.bio || <span className="text-gray-400">Not set</span>}</div>
+                <div className="mb-6 text-lg text-gray-800 space-y-2">
+                  <div>
+                    <span className="font-semibold text-purple-700">Skill Category:</span>{' '}
+                    <span className="inline-block bg-purple-100 text-purple-700 px-3 py-1 rounded-full font-semibold">
+                      {user.skill_category}
+                    </span>
+                  </div>
+                  <div><span className="font-semibold text-blue-700">Contact Info:</span> {user.contact_info || <span className="text-gray-400">Not set</span>}</div>
+                  <div><span className="font-semibold text-blue-700">Bio:</span> {user.bio || <span className="text-gray-400">Not set</span>}</div>
                 </div>
-                {/* Only show WhatsApp link if not viewing own profile */}
-                {user.contact_info && false && (
-                  <a
-                    href={`https://wa.me/${user.contact_info.replace(/[^\d]/g, '')}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-block bg-green-500 hover:bg-green-600 text-white font-semibold px-6 py-2 rounded-lg shadow transition-colors duration-150 mt-2"
+                <div className="text-center">
+                  <button
+                    className="bg-gradient-to-r from-blue-500 to-purple-500 text-white px-6 py-2 rounded-lg font-semibold shadow hover:from-blue-600 hover:to-purple-600 transition-colors"
+                    onClick={handleEdit}
                   >
-                    <span role="img" aria-label="WhatsApp">💬</span> Chat me on WhatsApp
-                  </a>
-                )}
-                <button
-                  className="bg-gradient-to-r from-blue-500 to-purple-500 text-white px-6 py-2 rounded-lg font-semibold shadow hover:from-blue-600 hover:to-purple-600 transition-colors ml-4"
-                  onClick={handleEdit}
-                >
-                  Edit Profile
-                </button>
+                    Edit Profile
+                  </button>
+                </div>
               </>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-4">
@@ -191,4 +190,4 @@ const Profile = () => {
   );
 };
 
-export default Profile; 
+export default Profile;

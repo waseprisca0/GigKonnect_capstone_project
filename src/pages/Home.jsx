@@ -242,10 +242,10 @@ const Home = () => {
       </section>
 
       {/* CTA Section - this should be the last section before the footer */}
-      <section className="bg-gray-900 text-white py-8">
+      <section className="bg-gray-900 text-white py-5">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold mb-4">Ready to Get Started?</h2>
-          <p className="text-xl text-gray-300 mb-8">
+          <p className="text-gray-300">
             Join thousands of satisfied clients who found their perfect worker on GigKonnect
           </p>
           {user ? (
