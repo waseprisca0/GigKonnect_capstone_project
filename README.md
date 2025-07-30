@@ -1,5 +1,6 @@
 # GigKonnect
 
+<<<<<<< HEAD
 GigKonnect is a fullstack web platform that connects clients with gig workers (such as nannies, cooks, mechanics, drivers, and electricians). The platform allows users to register as clients or workers, manage profiles, and enables admin users to manage all users. Built with React (frontend), Node.js/Express (backend), and PostgreSQL (database).
 
 ## Features
@@ -106,3 +107,87 @@ All services are hosted and run locally on your development machine for testing 
 
 ## License
 MIT
+=======
+A platform to connect clients with trusted gig workers for various services.
+
+## Project Link
+https://gig-konnect-capstone-project.vercel.app/
+---
+## Video demonstration Link
+https://drive.google.com/file/d/11rHuknKVeVcLTZtOfht0CEQXDG2arwd1/view?usp=sharing
+---
+
+## 🚀 Getting Started
+
+These instructions will help you set up and run the project on your local machine.
+
+### 1. **Clone the Repository**
+```bash
+git clone <your-repo-url>
+cd GigKonnect_capstone_project
+```
+
+### 2. **Install Dependencies**
+
+#### Install Frontend Dependencies
+```bash
+npm install
+```
+
+#### Install Backend Dependencies
+```bash
+cd backend
+npm install
+cd ..
+```
+
+### 3. **Set Up the Database**
+
+- Make sure you have SQLite or your preferred SQL database installed.
+- Run the migration and setup scripts:
+
+```bash
+cd backend
+node setup-db.js
+cd ..
+```
+
+### 4. **Run the Backend Server**
+```bash
+cd backend
+npm start
+# or
+node server.js
+```
+
+The backend will typically run on [http://localhost:5000](http://localhost:5000)
+
+### 5. **Run the Frontend (React) App**
+```bash
+npm run dev
+```
+
+The frontend will typically run on [http://localhost:5173](http://localhost:5173)
+
+---
+
+## 📦 Project Structure
+
+- `backend/` — Node.js/Express backend (API, database, authentication)
+- `src/` — React frontend (components, pages, layouts)
+- `public/` — Static assets
+
+---
+
+## 🛠️ Technologies Used
+- React
+- Node.js & Express
+- Tailwind CSS
+- Vite
+- SQLite (or your preferred SQL database)
+
+---
+
+## 🙋‍♂️ Need Help?
+If you run into any issues, please open an issue or contact the maintainer.
+>>>>>>> 303b04b7ef91e11f998c7aa8868bb87b059cd6d3

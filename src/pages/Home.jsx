@@ -1,6 +1,12 @@
+<<<<<<< HEAD
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { workersAPI } from "../services/api";
+=======
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
+>>>>>>> 303b04b7ef91e11f998c7aa8868bb87b059cd6d3
 
 const Home = () => {
   const userStr = localStorage.getItem('user');
@@ -8,6 +14,7 @@ const Home = () => {
   const workerProfileStr = localStorage.getItem('workerProfile');
   const workerProfile = workerProfileStr && workerProfileStr !== 'undefined' && workerProfileStr !== 'null' ? JSON.parse(workerProfileStr) : null;
   
+<<<<<<< HEAD
   const categories = [
     {
       id: 'nanny',
@@ -100,10 +107,64 @@ const Home = () => {
               <Link
                 to="/register"
                 className="bg-blue-700 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-800 transition-colors shadow border border-blue-800"
+=======
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-blue-500 via-blue-300 to-purple-100 font-sans relative overflow-hidden scroll-smooth">
+      {/* Hero Section */}
+      <section className="flex items-center justify-center min-h-screen h-screen py-0 relative overflow-hidden">
+        <div className="absolute bottom-0 left-0 w-full h-80 z-0 pointer-events-none">
+          <svg className="w-full h-full" viewBox="0 0 1440 320" fill="none" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path fill="#2563eb" fillOpacity="0.7">
+              <animate attributeName="d" dur="8s" repeatCount="indefinite"
+                values="
+                  M0,224L80,208C160,192,320,160,480,154.7C640,149,800,171,960,186.7C1120,203,1280,213,1360,218.7L1440,224L1440,320L0,320Z;
+                  M0,192L80,186.7C160,181,320,171,480,154.7C640,139,800,117,960,128C1120,139,1280,181,1360,202.7L1440,224L1440,320L0,320Z;
+                  M0,224L80,208C160,192,320,160,480,154.7C640,149,800,171,960,186.7C1120,203,1280,213,1360,218.7L1440,224L1440,320L0,320Z
+                "
+              />
+            </path>
+          </svg>
+        </div>
+        {/* Hero Content */}
+        <div className="max-w-4xl mx-auto px-4 text-center relative z-10">
+          <motion.h1
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2, type: 'spring' }}
+            className="text-5xl md:text-6xl font-extrabold text-white mb-6 drop-shadow-lg"
+          >
+            Find Trusted Gig Workers
+          </motion.h1>
+          <motion.p
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.5, type: 'spring' }}
+            className="text-2xl md:text-3xl text-blue-100 mb-10 font-medium"
+          >
+            Connecting you with the best gig workers for every need.
+          </motion.p>
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.8, type: 'spring' }}
+            className="flex flex-col sm:flex-row gap-4 justify-center"
+          >
+            <Link
+              to="/services"
+              className="bg-white text-blue-700 px-10 py-4 rounded-lg font-semibold hover:bg-blue-50 transition-colors shadow border border-blue-200 text-lg"
+            >
+              Browse Services
+            </Link>
+            {!user && (
+              <Link
+                to="/register"
+                className="bg-blue-700 text-white px-10 py-4 rounded-lg font-semibold hover:bg-blue-800 transition-colors shadow border border-blue-800 text-lg"
+>>>>>>> 303b04b7ef91e11f998c7aa8868bb87b059cd6d3
               >
                 Sign Up
               </Link>
             )}
+<<<<<<< HEAD
           </div>
         </div>
       </section>
@@ -187,6 +248,9 @@ const Home = () => {
               </div>
             </div>
           )}
+=======
+          </motion.div>
+>>>>>>> 303b04b7ef91e11f998c7aa8868bb87b059cd6d3
         </div>
       </section>
 
@@ -241,11 +305,19 @@ const Home = () => {
         </div>
       </section>
 
+<<<<<<< HEAD
       {/* CTA Section - this should be the last section before the footer */}
       <section className="bg-gray-900 text-white py-5">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold mb-4">Ready to Get Started?</h2>
           <p className="text-gray-300">
+=======
+      {/* CTA Section */}
+      <section className="bg-gray-900 text-white py-8">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-3xl font-bold mb-4">Ready to Get Started?</h2>
+          <p className="text-xl text-gray-300 mb-8">
+>>>>>>> 303b04b7ef91e11f998c7aa8868bb87b059cd6d3
             Join thousands of satisfied clients who found their perfect worker on GigKonnect
           </p>
           {user ? (
